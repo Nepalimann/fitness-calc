@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO TITLE & DESCRIPTION -->
+  <title>Macro & Calorie Calculator | Free Personalized TDEE & Macros</title>
+  <meta name="description" content="Calculate your daily calories and macros — protein, carbs, fat — based on your body and goals. Free, no signup, instant results. Weight loss, muscle gain, maintenance.">
+  <meta name="keywords" content="macro calculator, calorie calculator, TDEE calculator, macronutrient calculator, protein carb fat calculator, fitness calculator">
+  
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="Macro & Calorie Calculator">
+  <meta property="og:description" content="Get personalized daily calories and macro targets — no account needed.">
+  <meta property="og:type" content="website">
+  
+  <!-- Canonical — YOUR DOMAIN -->
+  <link rel="canonical" href="https://macrocaloriecalc.com/">
+  
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Roboto,sans-serif}
+    body{background:#f8fafc;color:#1e293b;line-height:1.6;padding:20px}
+    .container{max-width:700px;margin:0 auto}
+    header{text-align:center;margin-bottom:30px}
+    h1{font-size:1.8rem;color:#0f172a;margin-bottom:10px}
+    .intro{color:#475569;font-size:1rem;max-width:550px;margin:0 auto}
+    
+    .card{background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.07);padding:30px;margin-bottom:25px}
+    .card h2{font-size:1.25rem;margin-bottom:20px;color:#1e293b;border-bottom:1px solid #f1f5f9;padding-bottom:10px}
+    
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    @media(max-width:500px){.form-grid{grid-template-columns:1fr}}
+    
+    label{display:block;margin-bottom:6px;font-weight:500;color:#334155;font-size:0.95rem}
+    input,select{width:100%;padding:12px 14px;border:2px solid #e2e8f0;border-radius:10px;font-size:1rem;transition:border-color 0.2s}
+    input:focus,select:focus{outline:none;border-color:#3b82f6}
+    
+    button.calc-btn{width:100%;padding:14px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border:none;border-radius:10px;font-size:1.1rem;font-weight:600;cursor:pointer;margin-top:10px;transition:transform 0.2s}
+    button.calc-btn:hover{transform:translateY(-2px)}
+    
+    .results{margin-top:25px;display:none}
+    .results.show{display:block}
+    .results h3{text-align:center;margin-bottom:20px;color:#1e293b}
+    .calories-box{background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:12px;padding:20px;text-align:center;margin-bottom:20px}
+    .cal-value{font-size:2.5rem;font-weight:700;color:#1d4ed8}
+    .cal-label{color:#3b82f6;font-weight:500}
+    
+    .macros-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+    @media(max-width:500px){.macros-grid{grid-template-columns:1fr}}
+    .macro-card{border-radius:12px;padding:18px;text-align:center}
+    .macro-card.protein{background:#fef3c7}
+    .macro-card.carbs{background:#dbeafe}
+    .macro-card.fat{background:#ddd6fe}
+    .macro-num{font-size:1.6rem;font-weight:700;margin:5px 0}
+    .macro-unit{font-size:0.85rem;opacity:0.8}
+    
+    .disclaimer{margin-top:18px;padding:12px 16px;background:#f0fdf4;border-radius:10px;color:#166534;font-size:0.9rem;line-height:1.5}
+    .source-note{margin-top:20px;padding-top:15px;border-top:1px dashed #e2e8f0;font-size:0.85rem;color:#64748b}
+    .recommendation{margin-top:25px;padding:18px;background:#fefce8;border-radius:10px;border-left:4px solid #eab308}
+    .recommendation strong{color:#854d0e}
+    .recommendation a{color:#a16207;text-decoration:none;font-weight:600}
+    
+    .explanation{margin-top:30px}
+    .explanation h3{font-size:1.1rem;margin:20px 0 10px}
+    .explanation p{margin-bottom:12px;color:#475569}
+    .faq{margin-top:20px}
+    .faq-item{margin-bottom:15px}
+    .faq-q{font-weight:600;margin-bottom:4px}
+    
+    footer{text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid #e2e8f0;color:#64748b;font-size:0.9rem}
+    footer a{color:#3b82f6;text-decoration:none;margin:0 8px}
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>🥗 Macro & Calorie Calculator</h1>
+    <p class="intro">Find your exact daily calorie intake and personalized protein, carb, and fat targets — based on your body stats, activity level, and whether you want to lose fat, build muscle, or stay at your ideal weight. No signup, no cost, completely private.</p>
+  </header>
+
+  <!-- CALCULATOR TOOL -->
+  <div class="card">
+    <h2>Your Details</h2>
+    
+    <div class="form-grid">
+      <div>
+        <label for="gender">Gender</label>
+        <select id="gender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+      <div>
+        <label for="age">Age (years)</label>
+        <input type="number" id="age" min="15" max="100" placeholder="e.g. 30" required>
+      </div>
+      <div>
+        <label for="height">Height (cm)</label>
+        <input type="number" id="height" min="100" max="250" placeholder="e.g. 165" required>
+      </div>
+      <div>
+        <label for="weight">Weight (kg)</label>
+        <input type="number" id="weight" min="30" max="300" placeholder="e.g. 68" required>
+      </div>
+      <div>
+        <label for="activity">Activity Level</label>
+        <select id="activity">
+          <option value="1.2">Sedentary — desk job, little exercise</option>
+          <option value="1.375">Lightly Active — light exercise 1–3 days/week</option>
+          <option value="1.55" selected>Moderately Active — exercise 3–5 days/week</option>
+          <option value="1.725">Very Active — hard exercise 6–7 days/week</option>
+          <option value="1.9">Extra Active — intense training or physical job</option>
+        </select>
+      </div>
+      <div>
+        <label for="goal">Your Goal</label>
+        <select id="goal">
+          <option value="lose">Lose Fat</option>
+          <option value="maintain" selected>Maintain Weight</option>
+          <option value="gain">Build Muscle</option>
+        </select>
+      </div>
+      <div style="grid-column: 1 / -1;">
+        <label for="diet">Diet Preference</label>
+        <select id="diet">
+          <option value="balanced">Balanced — standard healthy split</option>
+          <option value="high-protein">High Protein — ideal for muscle & recovery</option>
+          <option value="low-carb">Lower Carb — more fat, fewer grains & sugars</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="calc-btn" onclick="calculate()">Calculate My Numbers →</button>
+
+    <!-- RESULTS -->
+    <div class="results" id="results">
+      <h3>✨ Your Personalized Targets</h3>
+      
+      <div class="calories-box">
+        <div class="cal-value" id="cal-result">0</div>
+        <div class="cal-label">Calories per day</div>
+      </div>
+      
+      <div class="macros-grid">
+        <div class="macro-card protein">
+          <div>Protein</div>
+          <div class="macro-num" id="prot-result">0g</div>
+          <div class="macro-unit">building & recovery</div>
+        </div>
+        <div class="macro-card carbs">
+          <div>Carbohydrates</div>
+          <div class="macro-num" id="carb-result">0g</div>
+          <div class="macro-unit">energy & performance</div>
+        </div>
+        <div class="macro-card fat">
+          <div>Fats</div>
+          <div class="macro-num" id="fat-result">0g</div>
+          <div class="macro-unit">hormones & health</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DISCLAIMER — Added below calculator -->
+    <div class="disclaimer">
+      ℹ️ <strong>Disclaimer:</strong> This calculator uses the proven Mifflin-St Jeor formula for more trusted and reliable estimates. Results are for informational purposes only — they are not a substitute for professional medical or dietary advice.
+    </div>
+  </div>
+
+  <!-- SEO EXPLANATION -->
+  <div class="card explanation">
+    <h2>How This Calculator Works</h2>
+    <p>Knowing your numbers is the first step toward consistent results. Our calculator uses the scientifically validated <strong>Mifflin-St Jeor equation</strong> — widely considered the most reliable formula — to estimate your Basal Metabolic Rate (BMR), then multiplies by your daily activity to find your Total Daily Energy Expenditure (TDEE).</p>
+    
+    <p>From there, we adjust calories based on your goal — a moderate deficit for sustainable fat loss, maintenance levels, or a clean surplus for muscle growth — and split those calories into protein, carbohydrates, and healthy fats. These ratios are balanced to keep you energized, satisfied, and progressing steadily.</p>
+
+    <p>Everything runs directly in your browser — we don't store your data, ask for your email, or show you intrusive ads. Just honest numbers to help you move forward.</p>
+
+    <div class="faq">
+      <h3>Frequently Asked Questions</h3>
+      
+      <div class="faq-item">
+        <div class="faq-q">What are macros exactly?</div>
+        <div>Macros (macronutrients) are the three main nutrient groups your body needs in large amounts: protein builds and repairs tissue, carbs fuel your brain and muscles, and fats support hormones and absorption. Getting them balanced makes all the difference in how you look, feel, and perform.</div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-q">How accurate are these numbers?</div>
+        <div>The Mifflin-St Jeor formula is accurate for most people within ±10–15%. It's an excellent starting point — track your weight and energy for 2 weeks, then adjust by 100–200 calories as needed. No calculator replaces listening to your own body.</div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-q">Should I count every single gram?</div>
+        <div>At first, yes — it builds awareness. Over time, most people learn to estimate portions without tracking everything. Think of these targets as your guide, not a rigid rulebook.</div>
+      </div>
+    </div>
+
+    <!-- SOURCE CITATION below FAQ -->
+    <div class="source-note">
+      <strong>Formula Source:</strong> Mifflin-St Jeor equation — established in 1990 and validated as the gold standard for estimating resting energy expenditure. Reference: Mifflin MD, St Jeor ST, et al. A new predictive equation for resting energy expenditure in healthy individuals. <em>Am J Clin Nutr.</em> 1990.
+    </div>
+
+    <!-- BODYLIX RECOMMENDATION below FAQ -->
+    <div class="recommendation">
+      <strong>📌 Want more trusted fitness guidance?</strong> Explore in-depth articles, evidence-based tips, and practical guides at 
+      <a href="https://bodylix.com" target="_blank" rel="noopener noreferrer">Bodylix.com</a> — your trusted resource for fitness, nutrition, and healthy living.
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 MacroCalorieCalc.com — All calculations run locally in your browser</p>
+    <p>
+      <a href="about.html">About</a> · 
+      <a href="privacy.html">Privacy Policy</a> · 
+      <a href="contact.html">Contact</a> · 
+      <a href="mailto:info@macrocaloriecalc.com">info@macrocaloriecalc.com</a>
+    </p>
+  </footer>
+
+</div>
+
+<script>
+function calculate(){
+  // Get inputs
+  const gender = document.getElementById('gender').value;
+  const age = parseFloat(document.getElementById('age').value);
+  const height = parseFloat(document.getElementById('height').value);
+  const weight = parseFloat(document.getElementById('weight').value);
+  const activity = parseFloat(document.getElementById('activity').value);
+  const goal = document.getElementById('goal').value;
+  const diet = document.getElementById('diet').value;
+
+  // Validate
+  if(!age || !height || !weight){ alert('Please fill in all your details.'); return; }
+
+  // Step 1: BMR — Mifflin-St Jeor Equation
+  let bmr;
+  if(gender === 'male'){
+    bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+  } else {
+    bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+  }
+
+  // Step 2: TDEE
+  let tdee = bmr * activity;
+
+  // Step 3: Goal adjustment
+  let calories = tdee;
+  if(goal === 'lose') calories = tdee - 400;
+  if(goal === 'gain') calories = tdee + 300;
+  calories = Math.round(calories);
+
+  // Step 4: Macro splits by diet preference
+  let pctProtein, pctCarbs, pctFat;
+  switch(diet){
+    case 'high-protein':
+      pctProtein = 0.35; pctCarbs = 0.35; pctFat = 0.30;
+      break;
+    case 'low-carb':
+      pctProtein = 0.30; pctCarbs = 0.20; pctFat = 0.50;
+      break;
+    default:
+      pctProtein = 0.30; pctCarbs = 0.45; pctFat = 0.25;
+  }
+
+  // Step 5: Convert to grams
+  const proteinG = Math.round((calories * pctProtein) / 4);
+  const carbG = Math.round((calories * pctCarbs) / 4);
+  const fatG = Math.round((calories * pctFat) / 9);
+
+  // Step 6: Display
+  document.getElementById('cal-result').textContent = calories;
+  document.getElementById('prot-result').textContent = proteinG + 'g';
+  document.getElementById('carb-result').textContent = carbG + 'g';
+  document.getElementById('fat-result').textContent = fatG + 'g';
+  document.getElementById('results').classList.add('show');
+}
+</script>
+</body>
+</html>
